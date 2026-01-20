@@ -1,3 +1,8 @@
 # CS210 Simple Shell
 
-Callum is a spammy
+## AUTHORS
+- Callum Charteris
+- Duncun Amundrund
+- Finlay Robb
+- Luke Wallace
+- Muhammad Saad Khan 
