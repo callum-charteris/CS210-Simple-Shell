@@ -12,6 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: make
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Run make
       run: make
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: shell-bin
+        path: bin/shell
