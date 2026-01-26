@@ -22,19 +22,20 @@ jobs:
         - name: Download build artifact
           uses: actions/download-artifact@v7
           with:
-            name: shell-bin
+            name: |
+                shell-bin-v${{ github.event.workflow_run.run_number }}
+                shell-bin-v${{ github.event.workflow_run.run_number }}-release
             run-id: ${{ github.event.workflow_run.id }}
             github-token: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Rename artifact
-          run: mv shell shell_v${{ github.event.workflow_run.run_number }}
 
         - name: Create Release
           uses: softprops/action-gh-release@v2
           with:
-            files: shell_v${{ github.event.workflow_run.run_number }}
+            files: |
+                shell_v${{ github.event.workflow_run.run_number }}
+                shell_v${{ github.event.workflow_run.run_number }}-release
             body: |
-                Automated release from successful build.
+                Automated release generated after successful build.
                 Changes: ${{ github.event.workflow_run.head_commit.message }}
             name: Build v${{ github.event.workflow_run.run_number }}
             tag_name: v${{ github.event.workflow_run.run_number }}

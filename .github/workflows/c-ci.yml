@@ -18,8 +18,30 @@ jobs:
     - name: Run make
       run: make
 
+    - name: Rename artifact
+      run: mv bin/shell bin/shell_v${{ github.run_number }}
+
     - name: Upload build artifact
       uses: actions/upload-artifact@v6
       with:
-        name: shell-bin
-        path: bin/shell
+        name: shell-bin-v${{ github.run_number }}
+        path: bin/shell_v${{ github.run_number }}
+
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Run make release=1
+      run: make release=1
+    
+    - name: Rename artifact
+      run: mv bin/shell bin/shell_v${{ github.run_number }}-release
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: shell-bin-v${{ github.run_number }}-release
+        path: bin/shell_v${{ github.run_number }}-release
