@@ -8,8 +8,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  get-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      next-version: ${{ steps.increment-version.outputs.next-version }}
+    
+    steps:
+      - name: Current version
+        id: current-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: ${{ github.repository }}
+
+      - name: Increment version
+        id: increment-version
+        run: |
+          CURRENT="${{ steps.current-version.outputs.version }}"
+          NEXT-VERSION="v$(( ${CURRENT:1} + 1 ))"
+          echo "next-version=$NEXT-VERSION" >> $GITHUB_OUTPUT
+          echo "$NEXT-VERSION" > version.txt
+
+      - name: Upload version artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: version
+          path: version.txt
+
   build:
     runs-on: ubuntu-latest
+    needs: get-version
 
     steps:
     - name: Checkout repository
@@ -19,16 +47,17 @@ jobs:
       run: make
 
     - name: Rename artifact
-      run: mv bin/shell bin/shell_v${{ github.run_number }}
+      run: mv bin/shell bin/shell_v${{ needs.get-version.outputs.next-version }}
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v6
       with:
-        name: shell_v${{ github.run_number }}
-        path: bin/shell_v${{ github.run_number }}
+        name: shell_v${{ needs.get-version.outputs.next-version }}
+        path: bin/shell_v${{ needs.get-version.outputs.next-version }}
 
   build-release:
     runs-on: ubuntu-latest
+    needs: get-version
 
     steps:
     - name: Checkout repository
@@ -38,10 +67,10 @@ jobs:
       run: make release=1
     
     - name: Rename artifact
-      run: mv bin/shell bin/shell_v${{ github.run_number }}-release
+      run: mv bin/shell bin/shell_v${{ needs.get-version.outputs.next-version }}-release
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v6
       with:
-        name: shell_v${{ github.run_number }}-release
-        path: bin/shell_v${{ github.run_number }}-release
+        name: shell_v${{ needs.get-version.outputs.next-version }}-release
+        path: bin/shell_v${{ needs.get-version.outputs.next-version }}-release
