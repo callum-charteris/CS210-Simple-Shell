@@ -16,8 +16,8 @@ This is the SUSHI Shell - Strathclyde Unix-type SHell Implementation
 ⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠛⠛⠛⠛⠋⠉⠉⠀⠀⠀⠀⠀⠀⠀
 **/
 
-#include "../include/input.h"
 #include "../include/externelRunner.h"
+#include "../include/input.h"
 #include <stdio.h>
 #include <string.h>
 
