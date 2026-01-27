@@ -37,3 +37,11 @@ void tokenize(char input[INPUT_LEN], char *output[INPUT_LEN]) {
   }
   printf("]\n");
 }
+
+int clear(char *input[INPUT_LEN]) {
+  for (int i = 0; input[i]; i++) {
+    free(input[i]);
+    input[i] = NULL;
+  }
+  return 0;
+}

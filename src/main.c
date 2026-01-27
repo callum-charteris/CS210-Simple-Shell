@@ -21,12 +21,10 @@ This is the SUSHI Shell - Strathclyde Unix-type SHell Implementation
 #include "../include/input.h"
 
 int main(void) {
-  // char *in[] = {"mkdir", "a", "b"};
-
   char *input[INPUT_LEN];
   while (get_input(input)) {
 
     run(input);
-    char *input[INPUT_LEN];
+    clear(input);
   }
 }
