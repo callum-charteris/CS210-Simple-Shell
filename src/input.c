@@ -1,6 +1,5 @@
 #include "../include/input.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 const char delimiters[] = " \t\n|><&;";
@@ -15,7 +14,7 @@ int get_input(char *output[INPUT_LEN]) {
 
   tokenize(input_buffer, output);
 
-  return !((strcmp(output[0], "exit") == 0 || (tmp == NULL)));
+  return (strcmp(output[0], "exit") && tmp);
 }
 
 void tokenize(char input[INPUT_LEN], char *output[INPUT_LEN]) {
