@@ -22,6 +22,8 @@ This is the SUSHI Shell - Strathclyde Unix-type SHell Implementation
 
 int main(void) {
   char *input[INPUT_LEN];
+  clear(input);
+
   while (get_input(input)) {
 
     run(input);
