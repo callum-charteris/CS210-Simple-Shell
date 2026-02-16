@@ -135,33 +135,6 @@ void history_add(char* tokens[INPUT_LEN]) {
 	
 }
 
-/**
-//This method will execute if a ! has been entered as the first token
-int history_exe(char* tokens[INPUT_LEN]) {
-
-	//this method will create a struct, which can then be added to the array of history
-	struct create_struct(tokens);
-
-	//need to copy local tokens as they are just pointers and will change
-	//repeat for all tokens, token pointer = 1
-
-	//want to create a new position in the struct array
-	//declare new struct, fill it, add it to the history array
-	//how to know what commandNumber this struct will get
-	struct history currentLine;
-	int pos = 0;
-
-	//after this, we need to add the current command line to the array of struct
-	while (token) {
-		//while you have a token, save it locallay
-		//want to malloc space for the current token
-		commands[0] = malloc(str_copy)
-	}
-	
-	
-}
-**/
-
 //this method will create a struct which will then be returned to be added to the array of structs
 struct history create_struct(char* tokens[INPUT_LEN]) {
  //want to create a new position in the struct array
