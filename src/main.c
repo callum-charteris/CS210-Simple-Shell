@@ -31,7 +31,12 @@ int main(void) {
   clear(tokens); // Clears data left over from previous run which causes errors
 
   while (get_input(input_buffer, tokens)) {
-    while (check_alias(tokens)) { // insert all aliases
+    int i;
+    for (i = 0; i < 100 && check_alias(tokens); i++) {
+    }
+    if (i == 100) {
+      printf("Error: looped aliases\n");
+      continue;
     }
 
     if (!check_history(tokens)) {

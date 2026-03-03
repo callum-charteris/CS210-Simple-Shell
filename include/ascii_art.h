@@ -20,7 +20,8 @@ const char *WEL =
     "\n";
 
 // global constant variable... exit message ASCII Art
-const char *EXI = "                                88               \n"
+const char *EXI = "\n"
+                  "                                88          88   \n"
                   "                                88               \n"
                   ",adPPYba, 88       88 ,adPPYba, 88,dPPYba,  88   \n"
                   "I8[     I 88       88 I8[    !! 88P'     8a 88   \n"
