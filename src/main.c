@@ -1,3 +1,5 @@
+#include "../include/alias.h"
+#include "../include/ascii_art.h"
 #include "../include/builtin.h"
 #include "../include/env.h"
 #include "../include/execute.h"
@@ -7,24 +9,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-const char *wel = "This is the SUSHI Shell - Strathclyde Unix-type SHell "
-                  "Implementation \n" PURPLE_FG "⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀\n"
-                  "⠀⠀⣠⣴⣾⣿⡿⠿⠛⠛⠛⠛⠛⠛⠛⠻⠿⢿⣿⣶⣤⣄⠀⠀\n"
-                  "⢠⣾⡿⠛⠉⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠉⠛⢿⣷⡀\n"
-                  "⣿⣿⠀⠀⠀⠀⠀⢶⣿⣿⣿⣿⣿⣿⣿⣿⡶⠀⠀⠀⠀⠈⣿⣷\n"
-                  "⣿⣿⣷⣄⡀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⢀⣠⣾⣿⣿\n"
-                  "⣿⣿⣿⣿⣿⣿⣶⣦⣤⣤⣤⣄⣠⣤⣤⣤⣴⣶⣿⣿⣿⣿⣿⣿\n"
-                  "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n"
-                  "⣿⣿⣿⣿⣿⣿⣿⡿⠛⢿⣿⣿⣿⣿⡿⠛⢿⣿⣿⣿⣿⣿⣿⣿\n"
-                  "⣿⣿⣿⣿⣿⣿⣿⣿⣦⣾⣿⣿⣿⣿⣷⣴⣿⣿⣿⣿⣿⣿⣿⣿\n"
-                  "⢻⣿⣿⣿⣿⣿⣿⣏⠀⠉⠛⠛⠛⠛⠉⠀⣹⣿⣿⣿⣿⣿⣿⡟\n"
-                  "⠀⠻⣿⣿⣿⣿⣿⣿⣿⣶⣦⣤⣤⣴⣶⣿⣿⣿⣿⣿⣿⣿⠟⠀\n"
-                  "⠀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀\n"
-                  "⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠛⠛⠛⠛⠋⠉⠉⠀⠀⠀⠀⠀⠀⠀\n"
-                  "\n" RESET;
-
 int main(void) {
-  printf("%s", wel);
+
+  printf("%s", WEL);
 
   char *saved_path[2] = {NULL, save_path()}; // stored in form of input
   printf("Saved path: %s\n", saved_path[1]);
@@ -37,28 +24,32 @@ int main(void) {
   printf("New HOME: %s\n", cwd);
 
   load_hist();
+  load_aliases();
 
   char input_buffer[INPUT_LEN]; // Buffer for user input
   char *tokens[INPUT_LEN];      // Pointers to each token in buffer
   clear(tokens); // Clears data left over from previous run which causes errors
 
   while (get_input(input_buffer, tokens)) {
-    // print_tokens(tokens); // Uncomment for debugging
-
-    if (!check_hist(tokens)) {
-      if (!check_builtin(tokens)) {
-        run(tokens);
+    if (!check_alias(tokens)) {
+      if (!check_history(tokens)) {
+        if (!check_builtin(tokens)) {
+          print_tokens(tokens);
+          run(tokens);
+        }
       }
     }
 
     clear(tokens);
   }
-  printf("\nSee You Later, Space Cowboy\n");
+  printf("%s", EXI);
 
   // Cleaning up
   setpath(saved_path);
   free(saved_path[1]);
   printf("Restored path: %s\n", getenv("PATH"));
+
   save_hist();
+  save_aliases();
   free_hist();
 }

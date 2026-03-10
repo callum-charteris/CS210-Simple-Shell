@@ -1,15 +1,20 @@
 #include "../include/builtin.h"
+#include "../include/alias.h"
 #include "../include/env.h"
 #include "../include/history.h"
 #include "../include/input.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#define UNUSED(x) (void)(x)
 
-const int num = 4;
-const char *names[] = {"getpath", "setpath", "cd", "history"};
-int (*funcs[])(char **) = {&getpath, &setpath, &cd, &print_history};
+const int num = 6;
+const char *names[] = {"getpath", "setpath", "cd",
+                       "history", "alias",   "aliases"};
+int (*funcs[])(char **) = {&getpath,       &setpath, &cd,
+                           &print_history, &alias,   &print_aliases};
 
 int check_builtin(char *input[INPUT_LEN]) {
   if (!input[0]) {
@@ -51,13 +56,32 @@ int cd(char *input[INPUT_LEN]) {
     return 1;
   }
   if (chdir(input[1])) {
-    perror("cd");
+    fprintf(stderr, "cd: %s: %s\n", input[1], strerror(errno));
     return 1;
   }
   return 0;
 }
 
 int print_history(char *input[INPUT_LEN]) {
+  // check if second token exists..don't print history
+  if (input[1]) {
+    printf("History doesn't take parameters!\n");
+    return 1; // error code
+  }
+
+  UNUSED(input);
   output_hist(stdout);
+  return 0;
+}
+
+int alias(char *input[INPUT_LEN]) {
+  add_alias(input);
+  printf("Alias %s saved!\n", input[1]);
+  return 0;
+}
+
+int print_aliases(char *input[INPUT_LEN]) {
+  UNUSED(input);
+  output_aliases(stdout);
   return 0;
 }
