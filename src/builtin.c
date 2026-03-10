@@ -3,11 +3,11 @@
 #include "../include/env.h"
 #include "../include/history.h"
 #include "../include/input.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 #define UNUSED(x) (void)(x)
 
 const int num = 6;
@@ -56,17 +56,17 @@ int cd(char *input[INPUT_LEN]) {
     return 1;
   }
   if (chdir(input[1])) {
-	fprintf(stderr, "cd: %s: %s\n", input[1], strerror(errno));
+    fprintf(stderr, "cd: %s: %s\n", input[1], strerror(errno));
     return 1;
   }
   return 0;
 }
 
 int print_history(char *input[INPUT_LEN]) {
-  //check if second token exists..don't print history
+  // check if second token exists..don't print history
   if (input[1]) {
-	  printf("History doesn't take parameters!\n");
-	  return 1; //error code
+    printf("History doesn't take parameters!\n");
+    return 1; // error code
   }
 
   UNUSED(input);
