@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #define UNUSED(x) (void)(x)
 
 const int num = 7;
@@ -55,7 +56,7 @@ int cd(char *input[INPUT_LEN]) {
     return 1;
   }
   if (chdir(input[1])) {
-    perror("cd");
+	fprintf(stderr, "cd: %s: %s\n", input[1], strerror(errno));
     return 1;
   }
   return 0;
